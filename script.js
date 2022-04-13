@@ -11,7 +11,6 @@ function computerPlay(){
 }
 
 function playRound(playerSelection,computerSelection){
-    playerSelection = playerSelection.toLowerCase();
     if(playerSelection == computerSelection){
         console.log(`It's a tie!Both the players selected ${playerSelection}`);
         return 0;
@@ -54,13 +53,27 @@ function game(){
     let playerSelection;
     let playerScore = 0;
     let computerScore = 0;
-    for(let i=0;i<5;i++){
-        playerSelection = prompt("Rock,Paper or Scissors?");
-        computerSelection = computerPlay();
-        let res = playRound(playerSelection,computerSelection);
-        (res > 0)?playerScore+=res:computerScore+=res;
-    }
-    console.log(`Player: ${playerScore}\nComputer: ${-1*computerScore}`);
+    const btns = document.querySelectorAll("button");
+    playerSelection = btns.forEach((btn) =>{
+        btn.addEventListener("click",() => {playerSelection =btn.id;
+            computerSelection = computerPlay();
+            console.log(playerSelection);
+            console.log(computerSelection);
+            let res = playRound(playerSelection,computerSelection);
+            (res > 0)?playerScore = playerScore+res:computerScore = computerScore+res;
+            if(playerScore == 5 || computerScore == -5){
+                h2.textContent = (playerScore > -1*computerScore)? "Player Wins!":"Computer Wins";
+                game();
+            }else{
+                h2.textContent = (`Player: ${playerScore}\nComputer: ${-1*computerScore}`);
+            }
+        })
+            }
+    );
+        
 }
 
+const container = document.querySelector("body");
+const h2 = document.createElement("h2");
 game();
+container.appendChild(h2);
